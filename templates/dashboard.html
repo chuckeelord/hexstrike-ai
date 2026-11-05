@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HexStrike AI — Mission Control</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">⬡</span>
+      <span class="brand-name">HexStrike AI</span>
+      <span class="brand-sub">Mission Control</span>
+    </div>
+    <div class="status-pill" id="server-status">
+      <span class="dot"></span>
+      <span id="server-status-text">Connecting…</span>
+    </div>
+  </header>
+
+  <main class="grid">
+
+    <!-- System metrics -->
+    <section class="card metrics">
+      <h2>System</h2>
+      <div class="metric-row">
+        <div class="metric"><span class="metric-label">CPU</span><span class="metric-value" id="m-cpu">--%</span></div>
+        <div class="metric"><span class="metric-label">Memory</span><span class="metric-value" id="m-mem">--%</span></div>
+        <div class="metric"><span class="metric-label">Uptime</span><span class="metric-value" id="m-uptime">--</span></div>
+      </div>
+      <div class="metric-row">
+        <div class="metric"><span class="metric-label">Cache hits</span><span class="metric-value" id="m-cache-hits">--</span></div>
+        <div class="metric"><span class="metric-label">Cache size</span><span class="metric-value" id="m-cache-size">--</span></div>
+        <div class="metric"><span class="metric-label">Commands run</span><span class="metric-value" id="m-cmds">--</span></div>
+      </div>
+    </section>
+
+    <!-- Tool availability -->
+    <section class="card tools">
+      <h2>Tool availability <button id="refresh-tools" class="btn-ghost">Refresh</button></h2>
+      <div id="tools-grid" class="tools-grid">
+        <p class="muted">Click Refresh to check installed tools (runs once — results are cached server-side).</p>
+      </div>
+    </section>
+
+    <!-- Live processes -->
+    <section class="card processes">
+      <h2>Live processes <span id="proc-count" class="badge">0</span></h2>
+      <table id="proc-table">
+        <thead>
+          <tr>
+            <th>PID</th><th>Command</th><th>Status</th><th>Progress</th><th>Runtime</th><th>ETA</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="proc-body">
+          <tr><td colspan="7" class="muted">No active processes.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Launch scan -->
+    <section class="card launch">
+      <h2>Launch scan</h2>
+      <form id="launch-form">
+        <label>
+          Tool
+          <select id="launch-tool">
+            <option value="nmap">nmap</option>
+            <option value="gobuster">gobuster</option>
+            <option value="nuclei">nuclei</option>
+            <option value="sqlmap">sqlmap</option>
+            <option value="ffuf">ffuf</option>
+            <option value="amass">amass</option>
+            <option value="subfinder">subfinder</option>
+          </select>
+        </label>
+        <label>
+          Target
+          <input type="text" id="launch-target" placeholder="example.com or 10.0.0.5" required>
+        </label>
+        <label>
+          Extra params (JSON, optional)
+          <input type="text" id="launch-extra" placeholder='{"ports": "80,443"}'>
+        </label>
+        <button type="submit" class="btn-primary">Launch</button>
+      </form>
+      <pre id="launch-output" class="output muted">Output will appear here.</pre>
+    </section>
+
+  </main>
+
+  <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

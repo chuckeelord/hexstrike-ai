@@ -39,7 +39,7 @@ import shutil
 import venv
 import zipfile
 from pathlib import Path
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import psutil
 import signal
 import requests
@@ -9462,6 +9462,56 @@ def process_dashboard():
 
     except Exception as e:
         logger.error(f"💥 Error getting process dashboard: {str(e)}")
+        return jsonify({"error": f"Server error: {str(e)}"}), 500
+
+@app.route("/dashboard", methods=["GET"])
+def dashboard_page():
+    """Serve the HexStrike mission-control dashboard (static HTML/JS UI)"""
+    return render_template("dashboard.html")
+
+@app.route("/api/dashboard/state", methods=["GET"])
+def dashboard_state():
+    """Lightweight, pollable snapshot for the mission-control dashboard.
+
+    Unlike /api/processes/dashboard (which renders ASCII art for terminal
+    clients) and /health (which re-checks ~150 tool binaries), this endpoint
+    returns plain numeric/text fields so the browser UI can poll it every
+    few seconds without re-running tool detection on every tick.
+    """
+    try:
+        processes = ProcessManager.list_active_processes()
+        current_time = time.time()
+
+        processes_payload = []
+        for pid, info in processes.items():
+            runtime = current_time - info["start_time"]
+            progress_fraction = info.get("progress", 0)
+            processes_payload.append({
+                "pid": pid,
+                "command": info["command"][:120],
+                "status": info["status"],
+                "runtime_seconds": round(runtime, 1),
+                "progress_fraction": progress_fraction,
+                "eta_seconds": info.get("eta", 0),
+                "bytes_processed": info.get("bytes_processed", 0),
+                "last_output": info.get("last_output", "")[:200]
+            })
+
+        return jsonify({
+            "timestamp": datetime.now().isoformat(),
+            "processes": processes_payload,
+            "total_processes": len(processes_payload),
+            "system_load": {
+                "cpu_percent": psutil.cpu_percent(interval=0.1),
+                "memory_percent": psutil.virtual_memory().percent
+            },
+            "cache_stats": cache.get_stats(),
+            "telemetry": telemetry.get_stats(),
+            "uptime_seconds": time.time() - telemetry.stats["start_time"]
+        })
+
+    except Exception as e:
+        logger.error(f"💥 Error getting dashboard state: {str(e)}")
         return jsonify({"error": f"Server error: {str(e)}"}), 500
 
 @app.route("/api/visual/vulnerability-card", methods=["POST"])

@@ -1,0 +1,162 @@
+/* HexStrike AI — Mission Control dashboard
+   Dark "cyber" theme matching the existing red/black HexStrike branding. */
+
+:root {
+  --bg: #0b0000;
+  --panel: #1a0505;
+  --panel-border: #3a0e0e;
+  --red: #b71c1c;
+  --red-bright: #ff5252;
+  --red-soft: #ff8a80;
+  --cream: #fffde7;
+  --muted: #9a7a7a;
+  --green: #00e676;
+  --yellow: #ffca28;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #220606 0%, var(--bg) 60%);
+  color: var(--cream);
+  font-family: var(--font-mono);
+  min-height: 100vh;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 2px solid var(--panel-border);
+  background: linear-gradient(90deg, #2d0000, #1a0505);
+}
+
+.brand { display: flex; align-items: baseline; gap: 10px; }
+.brand-mark { color: var(--red-bright); font-size: 1.4rem; }
+.brand-name { font-weight: bold; letter-spacing: 1px; font-size: 1.1rem; }
+.brand-sub { color: var(--muted); font-size: 0.85rem; }
+
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px solid var(--panel-border);
+  border-radius: 999px;
+  font-size: 0.85rem;
+}
+.status-pill .dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--muted);
+}
+.status-pill.ok .dot { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.status-pill.bad .dot { background: var(--red-bright); box-shadow: 0 0 6px var(--red-bright); }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 18px;
+  padding: 20px;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+.card h2 {
+  margin: 0 0 14px;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--red-soft);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.metric-row { display: flex; gap: 20px; margin-bottom: 10px; flex-wrap: wrap; }
+.metric { display: flex; flex-direction: column; min-width: 110px; }
+.metric-label { color: var(--muted); font-size: 0.75rem; text-transform: uppercase; }
+.metric-value { font-size: 1.3rem; font-weight: bold; color: var(--cream); }
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+.tool-chip {
+  display: flex; justify-content: space-between;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #140404;
+  border: 1px solid var(--panel-border);
+  font-size: 0.8rem;
+}
+.tool-chip .count.ok { color: var(--green); }
+.tool-chip .count.partial { color: var(--yellow); }
+.tool-chip .count.bad { color: var(--red-bright); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--panel-border); }
+th { color: var(--muted); text-transform: uppercase; font-size: 0.7rem; }
+td.muted, tr .muted { color: var(--muted); }
+
+.progress-track {
+  width: 100%; height: 8px; background: #140404;
+  border-radius: 4px; overflow: hidden; border: 1px solid var(--panel-border);
+}
+.progress-fill {
+  height: 100%; background: linear-gradient(90deg, var(--red), var(--red-bright));
+}
+
+.badge {
+  background: var(--red);
+  color: var(--cream);
+  border-radius: 999px;
+  padding: 1px 9px;
+  font-size: 0.75rem;
+}
+
+button {
+  font-family: var(--font-mono);
+  cursor: pointer;
+  border-radius: 6px;
+  border: 1px solid var(--panel-border);
+  padding: 4px 10px;
+  background: #140404;
+  color: var(--cream);
+  font-size: 0.75rem;
+}
+button:hover { border-color: var(--red-bright); }
+.btn-ghost { margin-left: 10px; text-transform: none; letter-spacing: 0; }
+.btn-primary { background: var(--red); border-color: var(--red-bright); }
+.btn-danger { background: #3a0e0e; color: var(--red-soft); }
+
+.launch form { display: flex; flex-direction: column; gap: 10px; }
+.launch label { display: flex; flex-direction: column; gap: 4px; font-size: 0.8rem; color: var(--muted); }
+.launch input, .launch select {
+  font-family: var(--font-mono);
+  background: #140404;
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  color: var(--cream);
+  padding: 6px 8px;
+}
+.output {
+  margin-top: 12px;
+  max-height: 260px;
+  overflow: auto;
+  background: #0c0303;
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  padding: 10px;
+  white-space: pre-wrap;
+  font-size: 0.78rem;
+}
+
+.muted { color: var(--muted); }

@@ -210,6 +210,18 @@ curl -X POST http://localhost:8888/api/intelligence/analyze-target \
   -d '{"target": "example.com", "analysis_type": "comprehensive"}'
 ```
 
+### Mission-Control Dashboard
+
+Once the server is running, open **http://localhost:8888/dashboard** in a
+browser for a live mission-control view: active processes with
+pause/resume/terminate controls, tool availability, cache/telemetry
+metrics, and a quick scan launcher. See [docs/dashboard.md](docs/dashboard.md)
+for how it's built and how to extend it.
+
+⚠️ The server has no authentication layer, so the dashboard inherits that —
+don't expose this port publicly without a reverse proxy and auth in front
+of it.
+
 ---
 
 ## AI Client Integration Setup
